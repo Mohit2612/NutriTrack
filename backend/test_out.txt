@@ -1,0 +1,184 @@
+1. Registering test user for token...
+2. Fetching existing foods for DB...
+3. Logging 1 meal (2 Apples = 190 kcal)
+4. Fetching Dashboard...
+Dashboard user: Dashboard Tester
+Consumed calories: 190
+Remaining calories: 1810
+5. Testing Over Target State (Logging 30 Apples = 2850 kcal)
+Consumed calories: 3040
+Remaining calories: 0
+Is Over Target: true
+ALL TESTS PASSED SUCCESSFULLY! ✅
+1. Registering test user for token...
+2. Fetching all foods...
+Received 18 foods. Validating: Apple
+3. Search food by name (case-insensitive: 'rIcE')...
+Found: Rice
+4. Filter by category ('Indian Food')...
+Found 10 Indian foods.
+5. Search + category (search='d', category='Indian Food')...
+Found: Dal, Dosa, Idli, Khichdi
+6. Get by valid ID...
+Found by ID: Dal (Calories: 150)
+7. Get by Invalid ID...
+Status: 404
+ALL TESTS PASSED!
+1. Registering test user...
+2. Setting up Dietary Preference (Vegan)...
+3. Fetching Food Suggestions...
+Returned 5 recommendations.
+[1] Rajma (Score: 80) - High in fiber to keep you full. Helps meet your remaining protein target.
+[2] Rice (Score: 65) - Low calorie density.
+[3] Dal (Score: 60) - High in fiber to keep you full.
+[4] Chole (Score: 60) - High in fiber to keep you full.
+[5] Roti (Score: 50) - Suitable for your Vegan diet.
+ALL TESTS PASSED SUCCESSFULLY! ✅
+1. Registering test user for token...
+2. Fetching FoodItems...
+Found Apple (95 kcal) and Paneer (265 kcal)
+3. Logging a Meal: 2 servings of Apple for Snacks...
+Meal logged: Apple. Calculated calories: 190 (Expected: 190)
+4. Editing the meal to 3 servings...
+Meal updated: Calculated calories: 285 (Expected: 285)
+5. Checking daily totals on Dashboard...
+Dashboard shows total consumed calories: undefined
+6. Logging Paneer for Dinner...
+7. Getting Meal History for Today...
+Found 2 meals in history.
+8. Testing Invalid Servings (0)...
+Status for invalid servings: 400 (Expected 400)
+ALL TESTS PASSED SUCCESSFULLY! ✅
+1. Registering test user for token...
+2. Adding some data...
+3. Fetching Progress (7d)...
+Weight Chart length: 1
+Water Chart length: 1
+Average Water: 1500ml
+BMI: 24.38
+4. Testing invalid range...
+ALL TESTS PASSED SUCCESSFULLY! ✅
+1. Registering test user for token...
+2. Testing Water Tracking...
+Water total: 750ml (Expected: 750)
+3. Testing Weight Tracking...
+Weight history records: 1
+4. Verifying Dashboard Integrations (BMI & Profile sync)...
+Dashboard Water: 750ml (Expected: 750)
+Dashboard User Weight: 75kg (Expected: 75, originally 80)
+5. Testing Bad Data...
+Negative water rejected: true
+Zero weight rejected: true
+ALL TESTS PASSED SUCCESSFULLY! ✅
+=== NutriTrack Admin Tests ===
+
+
+Test 1: No token → 401
+  ✅ PASS: No token returns 401
+
+Test 2: Normal user token → 403
+  ✅ PASS: Normal user gets 403
+  ✅ PASS: Response has success: false
+
+Test 3: Admin login
+  ✅ PASS: Admin login succeeds (200)
+  ✅ PASS: Admin login returns role=admin
+
+Test 4: Admin dashboard → 200
+  ✅ PASS: Admin gets 200
+  ✅ PASS: Response has success: true
+  ✅ PASS: Response has stats object
+
+Test 5: Stats contain required fields
+  ✅ PASS: Has totalUsers
+  ✅ PASS: Has totalAdmins
+  ✅ PASS: Has totalFoodItems
+  ✅ PASS: Has totalMeals
+  ✅ PASS: Has totalWaterLogs
+  ✅ PASS: Has totalWeightLogs
+  ✅ PASS: totalAdmins is at least 1
+   Stats received: {"totalUsers":23,"totalAdmins":1,"totalFoodItems":18,"totalMeals":4,"totalWaterLogs":9,"totalWeightLogs":6}
+
+Test 6: Normal user dashboard still works
+  ✅ PASS: Normal /dashboard returns 200
+
+Test 7: Registration response includes role
+  ✅ PASS: Register response has role field
+
+========================================
+Results: 17 passed, 0 failed
+ALL TESTS PASSED ✅
+◇ injected env (3) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+MongoDB Connected: localhost
+
+===== TEST RESULTS =====
+✅ PASS: No token gets 401
+✅ PASS: Normal user gets 403
+✅ PASS: Admin gets 200 for GET users
+✅ PASS: Admin can view single user
+✅ PASS: Password/hash is never returned
+✅ PASS: Admin can update safe user fields
+❌ FAIL: Last-admin protection works (role change) - Successfully removed last admin
+❌ FAIL: Current-admin deletion protection works - Wrong error status
+❌ FAIL: Admin can GET foods - Request failed with status code 403
+❌ FAIL: Admin can create food - Request failed with status code 403
+❌ FAIL: Admin can get created food - Request failed with status code 403
+❌ FAIL: Admin can update food - Request failed with status code 403
+✅ PASS: Normal user gets 403 on food admin endpoints
+❌ FAIL: Admin can delete safe/unreferenced test food - Request failed with status code 403
+❌ FAIL: Admin can GET categories - Request failed with status code 403
+❌ FAIL: Admin can create category - Request failed with status code 403
+❌ FAIL: Admin can update category - Request failed with status code 403
+❌ FAIL: Duplicate category is rejected - Did not return 400 on duplicate
+✅ PASS: Normal user gets 403 on category admin endpoints
+❌ FAIL: Admin can safely delete test category if not referenced - Request failed with status code 403
+✅ PASS: Food Search still works
+✅ PASS: Meal API still works
+✅ PASS: Dashboard still works
+✅ PASS: Progress API still works
+❌ FAIL: Admin can delete normal user - Request failed with status code 403
+
+Total Passed: 12
+Total Failed: 13
+◇ injected env (3) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+MongoDB Connected: localhost
+
+===== TEST RESULTS =====
+✅ PASS: No token gets 401
+✅ PASS: Normal user gets 403
+✅ PASS: Admin gets users report 200
+✅ PASS: Required fields in users report exist
+✅ PASS: Admin gets foods report 200
+✅ PASS: Admin gets meals report 200
+✅ PASS: Admin gets water report 200
+✅ PASS: Admin gets weight report 200
+✅ PASS: 7d range works
+✅ PASS: 30d range works
+✅ PASS: 3m range works
+✅ PASS: Existing dashboard still returns 200
+
+Total Passed: 12
+Total Failed: 0
+1. Registering user...
+User registered! Token received.
+2. Fetching profile...
+Profile Activity Level: Sedentary Fitness Goal: Maintain Weight
+3. Updating profile...
+Profile updated!
+4. Auto Calculating Goals...
+Calculated Goals: {
+  user: '6aa3663aec12ec1aa84a6de0',
+  calories: 2970,
+  protein: 150,
+  carbohydrates: 406,
+  fats: 83,
+  water: 8,
+  _id: '6aa3663bec12ec1aa84a6de1',
+  createdAt: '2026-09-11T02:23:55.204Z',
+  updatedAt: '2026-09-11T02:23:55.204Z',
+  __v: 0
+}
+5. Updating Goals...
+Updated Goals Calories: 3000
+ALL TESTS PASSED!
+Done 

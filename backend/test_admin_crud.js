@@ -122,6 +122,9 @@ async function runTests() {
             assertResult('Admin can update safe user fields', false, error.message);
         }
 
+        // Ensure there is strictly only 1 admin for this test
+        await User.deleteMany({ role: 'admin', _id: { $ne: adminUser._id } });
+
         // Test 8: Last-admin protection works
         try {
             await axios.put(`${API_URL}/admin/users/${adminUser._id}`, { role: 'user' }, adminConfig);

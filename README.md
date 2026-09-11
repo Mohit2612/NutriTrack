@@ -1,95 +1,87 @@
-# NutriTrack - Diet & Nutrition Tracker
+# NutriTrack
 
-Welcome to NutriTrack! This is a simple, beginner-friendly full-stack web application designed to help users track their daily food, calories, macronutrients, and water intake. 
+NutriTrack is a modern, full-stack web application designed to help users monitor their daily nutrition, log water intake, track body weight, and visualize health progress. It is built strictly using the MERN stack with complete separation of concerns and an MVC-driven backend architecture.
 
-## 1. What this project does
-NutriTrack allows users to:
-- Register and log in securely.
-- Track daily food and meals (Breakfast, Lunch, Dinner, Snack).
-- See a daily dashboard of total calories, protein, carbs, and fat.
-- Visualize progress against a daily calorie goal.
-- Track daily water intake (with an 8-glass goal).
-- View a history of past meals.
-- Edit their personal profile.
+## Features
 
-## 2. Technologies Used
-- **Frontend**: React.js, React Router, custom CSS (no Tailwind/Bootstrap), Vite.
-- **Backend**: Node.js, Express.js.
-- **Database**: MongoDB (via Mongoose).
-- **Authentication**: JWT (JSON Web Tokens) and bcrypt for password hashing.
+### User Features
+*   **Authentication**: Secure registration, login, and robust session validation with JWT and bcrypt.
+*   **Dietary Profiling**: Users define personalized goals (Maintain Weight, Lose Weight, Build Muscle), activity levels, and macro baselines.
+*   **Food Database Integration**: Dynamic searchable collection of `FoodItems` storing absolute macro values avoiding duplication.
+*   **Meal Logging**: Log daily meals (Breakfast, Lunch, Dinner, Snacks) with precise portion configurations calculating precise calorie and macro loads dynamically based on exact item values.
+*   **Water & Weight Tracking**: Users intuitively record their hydration and absolute scale metrics.
+*   **Dashboard & Progress**: Interactive aggregated cards combining Recharts line-charts showcasing active BMI trajectories, water deficits, and chronological adherence.
+*   **Smart Suggestions**: Algorithmic dietary recommendations intersecting active goal states and dynamically adjusting to protein/calorie deficits throughout the current day.
 
-## 3. Project Structure
-The project is divided into two main folders:
-- `backend/`: Contains the Node.js API server.
-- `frontend/`: Contains the React web application.
+### Admin Features
+*   **Secure Dashboards**: High-level statistical aggregating cards observing system activity.
+*   **User Management System**: Admins execute full CRUD cycles modifying user schemas or forcibly terminating accounts safely (cannot self-terminate or drop singular last-admin).
+*   **Food & Category Management**: Dynamic expansion modules allowing authenticated administrators to inject brand new globally searchable standard `FoodItems` and `Categories` actively into the user database safely.
+*   **System Reporting**: Custom 7d, 30d, and 3m intervals projecting system usage across pie and bar layouts leveraging massive internal MongoDB `$group` aggregating algorithms dynamically calculating metadata quickly without overloading JSON throughput.
 
-## 4. How MVC Works in this Project
-This project follows the **Model-View-Controller (MVC)** architecture on the backend:
-- **Models** (`backend/models/`): Defines the shape of the data stored in MongoDB (e.g., User, Food, Water).
-- **Views** (`frontend/src/`): The React application acts as the view layer, displaying data to the user.
-- **Controllers** (`backend/controllers/`): Contains the logic for what happens when a user requests an API endpoint (e.g., saving food, checking a password).
-- **Routes** (`backend/routes/`): Connects URLs to specific Controller functions.
+## Tech Stack
+*   **Frontend**: React (v19.2), React Router DOM (v7), Recharts (v3), Axios, CSS (Variable-based native layout without Tailwind/Bootstrap bloat)
+*   **Backend**: Node.js, Express.js (v4), Mongoose (v8), JSONWebToken (v9), bcryptjs.
+*   **Database**: MongoDB (Mongoose ODMs).
+*   **Bundler**: Vite (v8)
 
-## 5. How to install dependencies
-1. **Backend**:
-   Open a terminal, navigate to the backend folder, and install dependencies:
-   ```bash
-   cd backend
-   npm install
-   ```
-
-2. **Frontend**:
-   Open another terminal, navigate to the frontend folder, and install dependencies:
-   ```bash
-   cd frontend
-   npm install
-   ```
-
-## 6. How to configure MongoDB
-1. Ensure you have MongoDB installed locally or have a MongoDB Atlas cloud URI.
-2. The default connection string in the `.env` file assumes a local MongoDB installation running on the default port `27017`.
-
-## 7. How to create `.env`
-In the `backend/` folder, a `.env` file has already been created. If it's missing, create a new file named `.env` based on `.env.example`:
-```
-PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/nutritrack
-JWT_SECRET=supersecretjwtkey
+## Architecture & Folder Structure
+NutriTrack adheres to fundamental MVC (Model View Controller) boundaries mapping API flow predictably.
+```text
+NutriTrack/
+├── backend/
+│   ├── config/ (Database & Environment hooks)
+│   ├── controllers/ (Logic bounds resolving routes)
+│   ├── middleware/ (Authentication & Global Error handling pipelines)
+│   ├── models/ (Mongoose Data Schemas: User, Meal, FoodItem, Category, Water, Weight, Goal)
+│   ├── routes/ (Express REST mapping points)
+│   ├── utils/ (Date sanitization, goals, suggestions scripts)
+│   └── tests/ (Isolated automated backend node scripts mapping API reliability)
+└── frontend/
+    ├── src/
+    │   ├── components/ (Modular UI items: Navbars, Sidebars, Cards)
+    │   ├── pages/ (Page-level routing bindings: Login, Dashboard, Admin views)
+    │   ├── services/ (Axios REST mapping instance integrations)
+    │   └── index.css (Global root visual variables and responsive layouts)
 ```
 
-## 8. How to start backend
-In your backend terminal:
+## Setup & Running the Application
+
+Ensure you have **Node.js** and an active **MongoDB** instance (Local or Atlas) installed.
+
+### MongoDB Configuration
+Your MongoDB instance must be actively listening securely on its target port (default: 27017). Ensure a `.env` configuration file points at this URI properly in the backend directory wrapper.
+
+### **1. Backend Setup**
 ```bash
-npm start
-# Or using node:
-node server.js
+cd backend
+npm install
+# Ensure .env is populated with MONGO_URI and JWT_SECRET
+npm start      # For production standard executions
+npm run dev    # For interactive iterative mapping (Requires nodemon)
 ```
-You should see: `Server running on port 5000` and `MongoDB Connected`.
 
-## 9. How to start frontend
-In your frontend terminal:
+### **2. Frontend Setup**
 ```bash
-npm run dev
+cd frontend
+npm install
+npm run dev    # Runs the local Vite dev server (usually Port 5173)
+# To create the optimized deployment array:
+npm run build
 ```
-Open your browser to `http://localhost:5173` to view the application.
 
-## 10. API Endpoints
-- `POST /api/auth/register` - Create a new account
-- `POST /api/auth/login` - Login to an existing account
-- `GET /api/dashboard` - Get today's nutrition and water summary
-- `POST /api/foods` - Add a new food entry
-- `GET /api/foods/today` - Get today's foods
-- `DELETE /api/foods/:id` - Delete a specific food entry
-- `PUT /api/water` - Add, remove, or reset water
+## API Overview
+*   `/api/auth`: Generates authentication bearer tokens managing state.
+*   `/api/users`: Manages profile generation and demographic updates resolving into custom calculations.
+*   `/api/meals`: REST mappings tracking FoodItem dependencies and scaling serving capacities safely.
+*   `/api/dashboard`: Aggregating hooks pulling chronological user behaviors dynamically.
+*   `/api/admin/*`: Restricted backend hooks requiring validated `admin` credentials safely processing unconstrained user reads or system overwrites cleanly avoiding deadlocks.
 
-## 11. How Data Flows
-1. **React**: You click "Add Food" in the React frontend.
-2. **Axios**: The React app sends an HTTP `POST` request to Express.
-3. **Route**: Express receives the request at `/api/foods` and routes it to `foodController.js`.
-4. **Middleware**: The `authMiddleware` checks your token to ensure you're logged in.
-5. **Controller**: The `foodController` receives the food details and creates a new Mongoose document.
-6. **Model & MongoDB**: The `Food` model validates the data and saves it permanently to the MongoDB database.
-7. **Response**: The Controller sends a success response back to React, which then updates the UI!
+## Authentication & Security
+*   **Passwords**: Explicitly stripped in all REST returns ensuring DB leakage prevention.
+*   **JWT Integrity**: Explicitly mapped across `protect` wrappers preventing unverified token processing natively across all secure channels.
+*   **Role Bindings**: `.adminOnly` logic ensures `req.user.role === 'admin'` natively protecting core system metrics natively scaling without hardcoded string assumptions.
 
-## 12. How Authentication Works
-When you log in, the server checks your password using `bcrypt`. If it matches, the server creates a **JWT (JSON Web Token)** and sends it back to React. React saves this token in `localStorage`. Every time React needs to get secure data (like your foods), it sends this token in the "Authorization" header. The `authMiddleware` reads the token, figures out who you are, and allows access.
+## Limitations & External Services
+*   **Email Deliverability**: Password reset states currently execute mocked UI timeouts enforcing clean component scaling boundaries. SMTP transactional email architecture has purposefully been omitted to avoid unverified external network mapping requirements. 
+*   **AI/Billing**: Not included, isolating core logic purely towards fundamental functional CRUD structures safely ensuring non-corrupted architectural stability.
